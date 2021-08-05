@@ -1,0 +1,27 @@
+{
+  "name": "reddit-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --inspect index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/florianjuesten/reddit-cli.git"
+  },
+  "keywords": [
+    "reddit",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/florianjuesten/reddit-cli/issues"
+  },
+  "homepage": "https://github.com/florianjuesten/reddit-cli#readme",
+  "dependencies": {
+    "rss-parser": "^3.12.0",
+    "terminal-kit": "^2.1.6"
+  }
+}
