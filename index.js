@@ -1,4 +1,7 @@
 const fs = require("fs");
+const exec = require("child_process").exec;
+
+const inquirer = require("inquirer");
 const RSSParser = require("rss-parser");
 const term = require("terminal-kit").terminal;
 
@@ -36,36 +39,42 @@ async function main() {
   await Promise.all(rssPromises);
 
   // display feed data
+  let choices = [];
   feedResults.forEach((feedResult, index) => {
-    term.yellow(
-      `Processing Feed (${index + 1}/${feeds.length}: ${
-        feedResult.feedUrl.split("/r/")[1].split("/top/.rss")[0]
-      }\n`
-    );
-    term("\n");
+    var items = feedResult.items
+      .map((feedItem) => feedItem.title)
+      .slice(0, 5)
+      .map((i) => {
+        return { name: i };
+      });
 
-    var items = feedResult.items.map((feedItem) => feedItem.title).slice(0, 5);
-    console.log(`items`, items);
-
-    term.singleColumnMenu(
-      items,
-      {
-        keyBindings: {
-          j: "next",
-          k: "prev",
-        },
-      },
-      function (error, response) {
-        term("\n").eraseLineAfter.green(
-          "#%s selected: %s (%s,%s)\n",
-          response.selectedIndex,
-          response.selectedText,
-          response.x,
-          response.y
-        );
-        process.exit();
-      }
+    choices.push(
+      new inquirer.Separator(
+        `Processing Feed (${index + 1}/${feeds.length}: ${
+          feedResult.feedUrl.split("/r/")[1].split("/top/.rss")[0]
+        }`
+      )
     );
+    choices = choices.concat(items);
+  });
+
+  // ask for topics to view
+  const answers = await inquirer.prompt([
+    {
+      type: "checkbox",
+      message: "Select topics",
+      name: "topics",
+      choices: choices,
+      pageSize: 50,
+    },
+  ]);
+
+  //opening topics
+  const posts = feedResults.flatMap((f) => f.items);
+  posts.forEach((post) => {
+    if (answers.topics.indexOf(post.title) > -1) {
+      exec(`open ${post.link}`);
+    }
   });
 }
 

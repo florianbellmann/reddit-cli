@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/florianjuesten/reddit-cli#readme",
   "dependencies": {
+    "inquirer": "^8.1.2",
     "rss-parser": "^3.12.0",
     "terminal-kit": "^2.1.6"
   }
