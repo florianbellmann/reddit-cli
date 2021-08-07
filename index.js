@@ -26,7 +26,7 @@ async function main() {
     rssPromises.push(
       new Promise(async (resolve, reject) => {
         try {
-          const fullUrl = `${feedUrl}`;
+          const fullUrl = `${feedUrl}?limit=8&t=week`;
           const feedResult = await parser.parseURL(fullUrl);
           feedResults.push(feedResult);
           resolve();
@@ -50,13 +50,29 @@ async function main() {
 
     choices.push(
       new inquirer.Separator(
-        `Processing Feed (${index + 1}/${feeds.length}: ${
+        `Processing Feed (${index + 1}/${feeds.length}): ${
           feedResult.feedUrl.split("/r/")[1].split("/top/.rss")[0]
         }`
       )
     );
     choices = choices.concat(items);
+    choices.push(new inquirer.Separator(""));
   });
+  choices.push(
+    new inquirer.Separator(
+      "=================================================================="
+    )
+  );
+  choices.push(
+    new inquirer.Separator(
+      "=================================================================="
+    )
+  );
+  choices.push(
+    new inquirer.Separator(
+      "=================================================================="
+    )
+  );
 
   // ask for topics to view
   const answers = await inquirer.prompt([
