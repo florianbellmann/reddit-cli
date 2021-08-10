@@ -25,7 +25,14 @@ function readOldFeeds() {
 
 // storing already displayed feeds
 function storeFeeds(items) {
-  oldFeeds = oldFeeds.concat(items.map((i) => i.name));
+  oldFeeds = oldFeeds.concat(
+    items.map((i) => {
+      return { name: i.name, date: new Date().getTime() };
+    })
+  );
+
+  const tenDaysAgo = new Date().setDate(new Date().getDate() - 10);
+  oldFeeds = oldFeeds.filter((f) => f.date > tenDaysAgo);
   const uniq = [...new Set(oldFeeds)];
 
   if (oldFeeds) fs.writeFileSync("oldFeeds.json", JSON.stringify(uniq));
@@ -67,7 +74,7 @@ async function main() {
         return { name: i };
       })
       .filter((item) => {
-        return oldFeeds?.indexOf(item.name) === -1;
+        return oldFeeds?.map((f) => f.name).indexOf(item.name) === -1;
       })
       .slice(0, 5);
 
