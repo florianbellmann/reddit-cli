@@ -6,9 +6,29 @@ const RSSParser = require("rss-parser");
 const term = require("terminal-kit").terminal;
 
 // reading feed input
-const feeds = JSON.parse(fs.readFileSync("feeds.json")).urls;
+const feeds = JSON.parse(fs.readFileSync("feeds.json"))?.urls;
 if (feeds?.length <= 0) {
-  console.log("error");
+  console.error("Error. No feeds to read from.");
+}
+
+// reading stored posts from before
+let oldFeeds = readOldFeeds();
+function readOldFeeds() {
+  let feeds = [];
+  try {
+    feeds = JSON.parse(fs.readFileSync("oldFeeds.json"));
+  } catch {
+    console.log("No old feeds found.");
+  }
+  return feeds;
+}
+
+// storing already displayed feeds
+function storeFeeds(items) {
+  oldFeeds = oldFeeds.concat(items.map((i) => i.name));
+  const uniq = [...new Set(oldFeeds)];
+
+  if (oldFeeds) fs.writeFileSync("oldFeeds.json", JSON.stringify(uniq));
 }
 
 async function main() {
@@ -43,10 +63,15 @@ async function main() {
   feedResults.forEach((feedResult, index) => {
     var items = feedResult.items
       .map((feedItem) => feedItem.title)
-      .slice(0, 5)
       .map((i) => {
         return { name: i };
-      });
+      })
+      .filter((item) => {
+        return oldFeeds?.indexOf(item.name) === -1;
+      })
+      .slice(0, 5);
+
+    storeFeeds(items);
 
     choices.push(
       new inquirer.Separator(
