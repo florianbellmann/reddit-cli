@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/florianjuesten/reddit-cli.git"
+    "url": "git+https://github.com/florianbellmann/reddit-cli.git"
   },
   "keywords": [
     "reddit",
@@ -17,9 +17,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/florianjuesten/reddit-cli/issues"
+    "url": "https://github.com/florianbellmann/reddit-cli/issues"
   },
-  "homepage": "https://github.com/florianjuesten/reddit-cli#readme",
+  "homepage": "https://github.com/florianbellmann/reddit-cli#readme",
   "dependencies": {
     "inquirer": "^8.1.2",
     "rss-parser": "^3.12.0",

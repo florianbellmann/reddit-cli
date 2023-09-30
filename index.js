@@ -76,14 +76,13 @@ async function main() {
       .filter((item) => {
         return oldFeeds?.map((f) => f.name).indexOf(item.name) === -1;
       })
-      .slice(0, 5);
+      .slice(0, 3);
 
     storeFeeds(items);
 
     choices.push(
       new inquirer.Separator(
-        `Processing Feed (${index + 1}/${feeds.length}): ${
-          feedResult.feedUrl.split("/r/")[1].split("/top/.rss")[0]
+        `Processing Feed (${index + 1}/${feeds.length}): ${feedResult.feedUrl.split("/r/")[1].split("/top/.rss")[0]
         }`
       )
     );
